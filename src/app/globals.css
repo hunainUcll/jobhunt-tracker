@@ -1,0 +1,173 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+:root {
+  --background: #f7f8fc;
+  --card: #fff;
+  --foreground: #192139;
+  --muted: #f0f2f7;
+  --muted-foreground: #717b90;
+  --border: #e5e9f1;
+}
+.dark {
+  --background: #101522;
+  --card: #181f30;
+  --foreground: #edf0fa;
+  --muted: #232d42;
+  --muted-foreground: #a2adc3;
+  --border: #303a50;
+  color-scheme: dark;
+}
+@theme inline {
+  --color-background: var(--background);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+}
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+  }
+  input,
+  select,
+  textarea {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card);
+    padding: 10px 12px;
+    width: 100%;
+    font: inherit;
+    color: inherit;
+  }
+  input[type="checkbox"] {
+    width: auto;
+  }
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: 2px solid #818cf8;
+    outline-offset: 1px;
+  }
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  th {
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted-foreground);
+    padding: 15px 18px;
+    background: var(--muted);
+  }
+  td {
+    padding: 17px 18px;
+    border-top: 1px solid var(--border);
+  }
+  tr:hover td {
+    background: color-mix(in srgb, var(--muted) 45%, transparent);
+  }
+  a,
+  button {
+    cursor: pointer;
+  }
+}
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--muted-foreground);
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 6px;
+  padding: 5px 9px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.status-Applied,
+.status-Awaiting-reply {
+  background: #eef2ff;
+  color: #5966c8;
+}
+.status-Interview {
+  background: #e7f6ed;
+  color: #278e60;
+}
+.status-Assessment {
+  background: #fff4db;
+  color: #ab741c;
+}
+.status-Offer {
+  background: #daf5f0;
+  color: #16806e;
+}
+.status-Rejected,
+.status-Withdrawn {
+  background: #feecee;
+  color: #bd5263;
+}
+.status-Recruiter-contacted {
+  background: #f1eafb;
+  color: #8553bf;
+}
+.status-Interested {
+  background: #edf0f5;
+  color: #68768c;
+}
+.dark .badge {
+  filter: brightness(0.88);
+}
+.company-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #eef0fd;
+  color: #6662c6;
+  font-size: 16px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.panel-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+@media (max-width: 600px) {
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+}

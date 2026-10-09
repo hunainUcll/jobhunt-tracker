@@ -1,0 +1,6 @@
+node_modules
+.next
+package-lock.json
+AGENTS.md
+next-env.d.ts
+prisma/*.db

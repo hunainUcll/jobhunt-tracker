@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "sqlite"
+  url = env("DATABASE_URL")
+}
+model Company {
+  id String @id @default(cuid())
+  name String
+  normalizedName String @unique
+  domain String?
+  applications Application[]
+  contacts Contact[]
+}
+model Application {
+  id String @id @default(cuid())
+  companyId String
+  company Company @relation(fields: [companyId], references: [id])
+  jobTitle String
+  location String @default("")
+  jobUrl String @default("")
+  dateApplied DateTime?
+  status String @default("Interested")
+  type String @default("Application")
+  applicationId String?
+  duplicateKey String @unique
+  contactId String?
+  contact Contact? @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  lastContactDate DateTime?
+  nextFollowUpDate DateTime?
+  repliedAt DateTime?
+  assessmentDeadline DateTime?
+  interviewAt DateTime?
+  source String @default("Manual")
+  notes String @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  threads EmailThread[]
+  followUps FollowUp[]
+  activities Activity[]
+}
+model Contact {
+  id String @id @default(cuid())
+  name String
+  companyId String
+  company Company @relation(fields: [companyId], references: [id])
+  jobTitle String @default("")
+  email String @unique
+  linkedInUrl String @default("")
+  lastContacted DateTime?
+  notes String @default("")
+  applications Application[]
+}
+model EmailThread {
+  id String @id @default(cuid())
+  gmailThreadId String @unique
+  applicationId String?
+  application Application? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+  subject String
+  messages EmailMessage[]
+}
+model EmailMessage {
+  id String @id @default(cuid())
+  gmailMessageId String @unique
+  threadId String
+  thread EmailThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  sender String
+  recipient String @default("")
+  subject String
+  snippet String @default("")
+  classification String
+  classificationConfidence Float @default(1)
+  classificationSource String @default("RULES")
+  classificationReason String @default("")
+  suggestedCompany String?
+  suggestedRole String?
+  needsReview Boolean @default(false)
+  aiError String?
+  receivedAt DateTime
+  direction String @default("INBOUND")
+  matchConfidence Float @default(0)
+  matchReason String @default("")
+  suggestedApplicationId String?
+  reviewed Boolean @default(false)
+  dismissed Boolean @default(false)
+  notified Boolean @default(false)
+  createdAt DateTime @default(now())
+}
+model FollowUp {
+  id String @id @default(cuid())
+  applicationId String
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  dueAt DateTime
+  completedAt DateTime?
+  draftId String?
+  suggestedText String @default("")
+  createdAt DateTime @default(now())
+}
+model Activity {
+  id String @id @default(cuid())
+  applicationId String?
+  application Application? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+  message String
+  kind String @default("UPDATE")
+  read Boolean @default(false)
+  createdAt DateTime @default(now())
+}
+model UserSettings {
+  id String @id @default("local")
+  name String @default("Alex")
+  theme String @default("light")
+  gmailEmail String?
+  encryptedTokens String?
+  gmailScopes String @default("")
+  lastSyncAt DateTime?
+  syncCursor String?
+  syncLeaseUntil DateTime?
+  localAiEnabled Boolean @default(false)
+  ollamaUrl String @default("http://localhost:11434")
+  ollamaModel String @default("qwen2.5:3b")
+  aiConfidenceThreshold Float @default(0.70)
+}
